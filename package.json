@@ -20,6 +20,18 @@
       {
         "command": "marker-jumper.gotoMark",
         "title": "GoTo Mark"
+      },
+      {
+        "command": "marker-jumper.removeMark",
+        "title": "Remove Mark"
+      },
+      {
+        "command": "marker-jumper.clearMarks",
+        "title": "Remove Mark"
+      },
+      {
+        "command": "marker-jumper.test",
+        "title": "Marker Jumper Test"
       }
     ]
   },
