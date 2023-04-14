@@ -14,8 +14,12 @@
   "contributes": {
     "commands": [
       {
-        "command": "marker-jumper.helloWorld",
-        "title": "Hello World"
+        "command": "marker-jumper.setMark",
+        "title": "Set Mark"
+      },
+      {
+        "command": "marker-jumper.gotoMark",
+        "title": "GoTo Mark"
       }
     ]
   },
