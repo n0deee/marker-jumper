@@ -18,7 +18,7 @@ const RESERVED_KEYWORDS: Array<ReservedKeyWordInformation> = [
     }
 ];
 
-export async function cmdSetMark() {
+export async function setMark() {
     // Getting active text editor information
     let activeEditor = vscode.window.activeTextEditor;
     if (!activeEditor) {
@@ -53,7 +53,7 @@ export async function cmdSetMark() {
     markers.set(id, marker);
 }
 
-export async function cmdGoToMark() {
+export async function goToMark() {
     // Receiving user inpug
     let items = util.getMarkerQuickItems(markers);
     let input: MarkQuickPickItem | undefined = await vscode.window.showQuickPick(items, { canPickMany: false, matchOnDescription: true, title: 'GoTo Mark' }) as MarkQuickPickItem;
@@ -81,7 +81,7 @@ export async function cmdGoToMark() {
     }
 }
 
-export async function cmdRemoveMark() {
+export async function removeMark() {
     // Receiving user inpug
     let items = util.getMarkerQuickItems(markers);
     let input: MarkQuickPickItem | undefined = await vscode.window.showQuickPick(items, { canPickMany: false, matchOnDescription: true, title: 'Remove Mark' }) as MarkQuickPickItem;
@@ -92,7 +92,7 @@ export async function cmdRemoveMark() {
     markers.delete(id);
 }
 
-export async function cmdClearMarks() {
+export async function clearMarks() {
     markers.clear();
     util.messageInformation('All Markers Removed');
 }

@@ -5,10 +5,10 @@ import * as util from './utils';
 
 
 export function activate(context: vscode.ExtensionContext) {
-	let cmdSetMark = vscode.commands.registerCommand('marker-jumper.setMark', cmds.cmdSetMark);
-	let cmdGoToMark = vscode.commands.registerCommand('marker-jumper.gotoMark', cmds.cmdGoToMark);
-	let cmdRemoveMark = vscode.commands.registerCommand('marker-jumper.removeMark', cmds.cmdRemoveMark);
-	let cmdClearMarks = vscode.commands.registerCommand('marker-jumper.clearMarks', cmds.cmdClearMarks);
+	let cmdSetMark = vscode.commands.registerCommand('marker-jumper.setMark', cmds.setMark);
+	let cmdGoToMark = vscode.commands.registerCommand('marker-jumper.gotoMark', cmds.goToMark);
+	let cmdRemoveMark = vscode.commands.registerCommand('marker-jumper.removeMark', cmds.removeMark);
+	let cmdClearMarks = vscode.commands.registerCommand('marker-jumper.clearMarks', cmds.clearMarks);
 
 	context.subscriptions.push(cmdSetMark);
 	context.subscriptions.push(cmdGoToMark);
