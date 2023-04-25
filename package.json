@@ -2,7 +2,7 @@
   "name": "marker-jumper",
   "displayName": "Marker Jumper",
   "description": "",
-  "version": "0.0.1",
+  "version": "0.8.0",
   "engines": {
     "vscode": "^1.77.0"
   },
@@ -15,23 +15,24 @@
     "commands": [
       {
         "command": "marker-jumper.setMark",
-        "title": "Set Mark"
+        "title": "Marker Jumper: Set Mark",
+        "shortTitle": "Set Mark"
       },
       {
         "command": "marker-jumper.gotoMark",
-        "title": "GoTo Mark"
+        "title": "Marker Jumper: Go to Mark",
+        "shortTitle": "Go to mark"
+
       },
       {
         "command": "marker-jumper.removeMark",
-        "title": "Remove Mark"
+        "title": "Marker Jumper: Remove Mark",
+        "shortTitle": "Remove Mark"
       },
       {
         "command": "marker-jumper.clearMarks",
-        "title": "Remove Mark"
-      },
-      {
-        "command": "marker-jumper.test",
-        "title": "Marker Jumper Test"
+        "title": "Marker Jumper: Clears Marks",
+        "shortTitle": "Clears Marks"
       }
     ]
   },
