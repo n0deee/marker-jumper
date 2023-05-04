@@ -25,6 +25,13 @@ export class Mark {
 		this.lastUse = Date.now();
 	}
 
+	public addLastUseTime(ammount: number) {
+		if (this.lastUse === undefined) this.setLastUseForNow();
+		if (this.lastUse === undefined) throw new Error('Error while updating lasttime');
+
+		this.lastUse += ammount;
+	}
+
 	static createFromCurrentPos(description?: string): Mark | undefined {
 		let activeEditor = vscode.window.activeTextEditor;
 		if (!activeEditor) return undefined;

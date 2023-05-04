@@ -57,6 +57,7 @@ export async function goToMark(context: MarkContext) {
     // Saving Last Position
     let backMark: Mark | undefined = Mark.createFromCurrentPos('Last Position');
     if (backMark) {
+        backMark.addLastUseTime(1);
         context.markManager.setMark(ReservedId.last, backMark);
     }
     
