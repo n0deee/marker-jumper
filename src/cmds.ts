@@ -1,24 +1,10 @@
 import * as vscode from 'vscode';
-import { Mark, MarkQuickPickItem } from './mark';
+import { Mark, MarkManager, MarkQuickPickItem, ReservedId, ReservedIdInformation } from './mark';
 import * as util from './utils';
+import { MarkContext } from './markcontext';
 
-export const setMarkInputRegex = /^(\w+)(?:\s(.+))?$/;
-export const markers: Map<string, Mark> = new Map<string, Mark>;
-export const BACKPOS_ID = 'last';
 
-interface ReservedKeyWordInformation {
-    key: string,
-    description: string
-}
-
-const RESERVED_KEYWORDS: Array<ReservedKeyWordInformation> = [
-    {
-        key: 'last',
-        description: 'Last cursor position (before a Mark Goto)'
-    }
-];
-
-export async function setMark() {
+export async function setMark(context: MarkContext) {
     // Getting active text editor information
     let activeEditor = vscode.window.activeTextEditor;
     if (!activeEditor) {
@@ -33,7 +19,7 @@ export async function setMark() {
     let input: string | undefined = await vscode.window.showInputBox({ 'title': 'Set Mark', 'prompt': `Marker At: ${util.positionToLine(cursorPos)}` });
     if (!input) return;
 
-    let match = input.match(setMarkInputRegex);
+    let match = input.match(context.setMarkInputRegex);
     if (!match || !match[1]) {
         util.messageError('Invalid identifier.\nExample: `1` or `20 with a description`');
         return;
@@ -43,36 +29,37 @@ export async function setMark() {
     let id: string = match[1];
     let description: string | undefined = match[2];
 
-    let reserved = getReservedKeyword(id);
+    let reserved = context.markManager.getReservedKeyInfo(id);
     if (reserved) {
         util.messageError(`This ID are reserved. (key: ${reserved.key}, prupose: ${reserved.description})`);
         return;
     }
 
     let marker: Mark = Mark.createFromCurrentPos(description) || new Mark(document, cursorPos, description);
-    markers.set(id, marker);
+    context.markManager.setMark(id, marker);
 }
 
-export async function goToMark() {
+export async function goToMark(context: MarkContext) {
     // Receiving user inpug
-    let items = util.getMarkerQuickItems(markers);
+    let items = util.getMarkerQuickItems(context.markManager.getSortedListByLastUse());
     let input: MarkQuickPickItem | undefined = await vscode.window.showQuickPick(items, { canPickMany: false, matchOnDescription: true, title: 'GoTo Mark' }) as MarkQuickPickItem;
     if (!input) return;
-
+    
     // Getting the marker
     let id: string = input.id;
-    let marker = markers.get(id);
+    let marker = context.markManager.getMark(id);
     if (!marker) {
         util.messageError('Marker not found');
         return;
     }
+    marker.setLastUseForNow();
 
     // Saving Last Position
     let backMark: Mark | undefined = Mark.createFromCurrentPos('Last Position');
     if (backMark) {
-        markers.set(BACKPOS_ID, backMark);
+        context.markManager.setMark(ReservedId.last, backMark);
     }
-
+    
     // Go To document and line
     let success = await util.gotoDocPos(marker.document, marker.position);
     if (!success) {
@@ -81,23 +68,18 @@ export async function goToMark() {
     }
 }
 
-export async function removeMark() {
+export async function removeMark(context: MarkContext) {
     // Receiving user inpug
-    let items = util.getMarkerQuickItems(markers);
+    let items = util.getMarkerQuickItems(context.markManager.getSortedListByLastUse());
     let input: MarkQuickPickItem | undefined = await vscode.window.showQuickPick(items, { canPickMany: false, matchOnDescription: true, title: 'Remove Mark' }) as MarkQuickPickItem;
     if (!input) return;
 
     // Getting the marker
     let id: string = input.id;
-    markers.delete(id);
+    context.markManager.removeMark(id);
 }
 
-export async function clearMarks() {
-    markers.clear();
+export async function clearMarks(context: MarkContext) {
+    context.markManager.clearMarks();
     util.messageInformation('All Markers Removed');
-}
-
-
-function getReservedKeyword(key: string): ReservedKeyWordInformation | undefined {
-    return RESERVED_KEYWORDS.find((x) => x.key === key);
 }

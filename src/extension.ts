@@ -1,14 +1,19 @@
 import * as vscode from 'vscode';
-import { Mark, MarkQuickPickItem } from './mark';
+import { ReservedId } from './mark';
 import * as cmds from './cmds';
-import * as util from './utils';
+import { MarkContext } from './markcontext';
 
 
 export function activate(context: vscode.ExtensionContext) {
-	let cmdSetMark = vscode.commands.registerCommand('marker-jumper.setMark', cmds.setMark);
-	let cmdGoToMark = vscode.commands.registerCommand('marker-jumper.gotoMark', cmds.goToMark);
-	let cmdRemoveMark = vscode.commands.registerCommand('marker-jumper.removeMark', cmds.removeMark);
-	let cmdClearMarks = vscode.commands.registerCommand('marker-jumper.clearMarks', cmds.clearMarks);
+	var markContext = new MarkContext();
+
+	markContext.markManager.registerReservedId({ key: ReservedId.last, description: 'Last cursor position (before a Mark Goto)' });
+
+
+	let cmdSetMark = vscode.commands.registerCommand('marker-jumper.setMark', () => { cmds.setMark(markContext); });
+	let cmdGoToMark = vscode.commands.registerCommand('marker-jumper.gotoMark', () => { cmds.goToMark(markContext); });
+	let cmdRemoveMark = vscode.commands.registerCommand('marker-jumper.removeMark', () => { cmds.removeMark(markContext); });
+	let cmdClearMarks = vscode.commands.registerCommand('marker-jumper.clearMarks', () => { cmds.clearMarks(markContext); });
 
 	context.subscriptions.push(cmdSetMark);
 	context.subscriptions.push(cmdGoToMark);

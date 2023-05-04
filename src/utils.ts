@@ -2,7 +2,7 @@
 
 import * as vscode from 'vscode';
 const path = require('path');
-import { MarkQuickPickItem, Mark } from './mark';
+import { MarkQuickPickItem, Mark, IdentifiedMark } from './mark';
 
 export function gotoPos(pos: vscode.Position): boolean {
     let activeEditor = vscode.window.activeTextEditor;
@@ -15,10 +15,13 @@ export function gotoPos(pos: vscode.Position): boolean {
     return true;
 }
 
-export function getMarkerQuickItems(markers: Map<string, Mark>): Array<vscode.QuickPickItem> {
+export function getMarkerQuickItems(markers: Array<IdentifiedMark>): Array<vscode.QuickPickItem> {
     let array: Array<vscode.QuickPickItem> = [];
 
-    markers.forEach((value, key) => {
+    markers.forEach((x) => {
+        const key = x.id;
+        const value = x.mark;
+
         let fileNameText = path.basename(value.document.fileName);
 
         let item: MarkQuickPickItem = { 'id': key, 'label': key, detail: `${positionToLine(value.position)}, ${fileNameText}`, description: value.description };
