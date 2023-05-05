@@ -1,7 +1,7 @@
 // TODO!: Make This a specific file/class
 
 import * as vscode from 'vscode';
-import { MarkQuickPickItem, Mark, IdentifiedMark } from './mark';
+import { MarkQuickPickItem, IdentifiedMark } from './mark';
 
 export function gotoPos(pos: vscode.Position): boolean {
     let activeEditor = vscode.window.activeTextEditor;
@@ -23,7 +23,7 @@ export function getMarkerQuickItems(markers: Array<IdentifiedMark>): Array<vscod
 
         let workspaceRelativePath = vscode.workspace.asRelativePath(value.document.fileName);
 
-        let item: MarkQuickPickItem = { 'id': key, 'label': key, detail: `${positionToLine(value.position)}, ${workspaceRelativePath}`, description: value.description };
+        let item: MarkQuickPickItem = { 'id': key, 'label': key, detail: `${positionToString(value.position)}, ${workspaceRelativePath}`, description: value.description };
         array.push(item);
     });
 
@@ -51,6 +51,10 @@ export function messageInformation(message: string): void {
     vscode.window.showInformationMessage(`Marker Jumper: ${message}`);
 }
 
-export function positionToLine(position: vscode.Position): string {
+export function statusBarMessage(message: string): void {
+    vscode.window.setStatusBarMessage(message);
+}
+
+export function positionToString(position: vscode.Position): string {
     return `Ln ${position.line}, Ch ${position.character}`;
 }

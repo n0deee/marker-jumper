@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
-import { Mark, MarkManager, MarkQuickPickItem, ReservedId, ReservedIdInformation } from './mark';
+import { Mark, MarkQuickPickItem, ReservedId } from './mark';
 import * as util from './utils';
-import { MarkContext } from './markcontext';
+import { MarkerJumperContext } from './markcontext';
 
 
-export async function setMark(context: MarkContext) {
+export async function setMark(context: MarkerJumperContext) {
     // Getting active text editor information
     let activeEditor = vscode.window.activeTextEditor;
     if (!activeEditor) {
@@ -16,7 +16,7 @@ export async function setMark(context: MarkContext) {
     let cursorPos = activeEditor.selection.active;
 
     // Getting user input
-    let input: string | undefined = await vscode.window.showInputBox({ 'title': 'Set Mark', 'prompt': `Marker At: ${util.positionToLine(cursorPos)}` });
+    let input: string | undefined = await vscode.window.showInputBox({ 'title': 'Set Mark', 'prompt': `Marker At: ${util.positionToString(cursorPos)}` });
     if (!input) return;
 
     let match = input.match(context.setMarkInputRegex);
@@ -39,7 +39,7 @@ export async function setMark(context: MarkContext) {
     context.markManager.setMark(id, marker);
 }
 
-export async function goToMark(context: MarkContext) {
+export async function goToMark(context: MarkerJumperContext) {
     // Receiving user inpug
     let items = util.getMarkerQuickItems(context.markManager.getSortedListByLastUse());
     let input: MarkQuickPickItem | undefined = await vscode.window.showQuickPick(items, { canPickMany: false, matchOnDescription: true, title: 'GoTo Mark' }) as MarkQuickPickItem;
@@ -69,7 +69,7 @@ export async function goToMark(context: MarkContext) {
     }
 }
 
-export async function removeMark(context: MarkContext) {
+export async function removeMark(context: MarkerJumperContext) {
     // Receiving user inpug
     let items = util.getMarkerQuickItems(context.markManager.getSortedListByLastUse());
     let input: MarkQuickPickItem | undefined = await vscode.window.showQuickPick(items, { canPickMany: false, matchOnDescription: true, title: 'Remove Mark' }) as MarkQuickPickItem;
@@ -80,7 +80,7 @@ export async function removeMark(context: MarkContext) {
     context.markManager.removeMark(id);
 }
 
-export async function clearMarks(context: MarkContext) {
+export async function clearMarks(context: MarkerJumperContext) {
     context.markManager.clearMarks();
     util.messageInformation('All Markers Removed');
 }

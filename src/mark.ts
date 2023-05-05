@@ -51,18 +51,55 @@ export enum ReservedId {
 	last = 'last'
 }
 
+
+
+export type MarkManagerEventType = 'markset' | 'markremove' | 'markclear';
 //! Refactoring! Change every 'KEY' to 'ID'
 export class MarkManager {
+	private events: Map<MarkManagerEventType, Array<Function>>;
 	private markers: Map<string, Mark>;
 	private reservedIdInfos: Array<ReservedIdInformation>;
 
 	public constructor() {
 		this.markers = new Map<string, Mark>();
 		this.reservedIdInfos = [];
+		this.events = new Map<MarkManagerEventType, Array<Function>>;
+	}
+
+	public addEventListener(event: MarkManagerEventType, func: Function) {
+		let eventArray = this.events.get(event);
+
+		if (eventArray === undefined) {
+			eventArray = [];
+			this.events.set(event, eventArray);
+		}
+
+		eventArray.push(func);
+	}
+
+	public removeEventListener(event: MarkManagerEventType, func: Function) {
+		let eventArray = this.events.get(event);
+		if (eventArray === undefined) return;
+
+		let index = eventArray.indexOf(func);
+
+		if (index === undefined) return;
+
+		eventArray = [...eventArray.splice(0, index), ...eventArray.splice(index + 1)];
+	}
+
+	public raiseEvent(event: MarkManagerEventType, ...params: any) {
+		let eventArray = this.events.get(event);
+		if (eventArray === undefined) return;
+
+		eventArray.forEach((f) => {
+			f(...params);
+		});
 	}
 
 	public setMark(id: string, mark: Mark) {
 		this.markers.set(id, mark);
+		this.raiseEvent('markset', id, mark);
 	}
 
 	public getMark(id: string): Mark | undefined {
@@ -71,10 +108,12 @@ export class MarkManager {
 
 	public removeMark(id: string) {
 		this.markers.delete(id);
+		this.raiseEvent('markremove', id);
 	}
 
 	public clearMarks() {
 		this.markers.clear();
+		this.raiseEvent('markclear');
 	}
 
 	public setMarkUsedNow(id: string) {

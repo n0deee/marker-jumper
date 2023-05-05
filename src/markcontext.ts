@@ -1,7 +1,6 @@
 import { MarkManager } from './mark';
 
-
-export class MarkContext {
+export class MarkerJumperContext {
     public setMarkInputRegex: RegExp;
     public markManager: MarkManager;
 
