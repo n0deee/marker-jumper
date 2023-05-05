@@ -15,6 +15,8 @@ export function activate(context: vscode.ExtensionContext) {
 	let cmdRemoveMark = vscode.commands.registerCommand('marker-jumper.removeMark', () => { cmds.removeMark(markContext); });
 	let cmdClearMarks = vscode.commands.registerCommand('marker-jumper.clearMarks', () => { cmds.clearMarks(markContext); });
 
+	
+
 	context.subscriptions.push(cmdSetMark);
 	context.subscriptions.push(cmdGoToMark);
 	context.subscriptions.push(cmdRemoveMark);

@@ -1,7 +1,6 @@
 // TODO!: Make This a specific file/class
 
 import * as vscode from 'vscode';
-const path = require('path');
 import { MarkQuickPickItem, Mark, IdentifiedMark } from './mark';
 
 export function gotoPos(pos: vscode.Position): boolean {
@@ -22,9 +21,9 @@ export function getMarkerQuickItems(markers: Array<IdentifiedMark>): Array<vscod
         const key = x.id;
         const value = x.mark;
 
-        let fileNameText = path.basename(value.document.fileName);
+        let workspaceRelativePath = vscode.workspace.asRelativePath(value.document.fileName);
 
-        let item: MarkQuickPickItem = { 'id': key, 'label': key, detail: `${positionToLine(value.position)}, ${fileNameText}`, description: value.description };
+        let item: MarkQuickPickItem = { 'id': key, 'label': key, detail: `${positionToLine(value.position)}, ${workspaceRelativePath}`, description: value.description };
         array.push(item);
     });
 
