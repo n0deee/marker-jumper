@@ -29,9 +29,9 @@ export async function setMark(context: MarkerJumperContext) {
     let id: string = match[1];
     let description: string | undefined = match[2];
 
-    let reserved = context.markManager.getReservedKeyInfo(id);
+    let reserved = context.markManager.getReservedIdInfo(id);
     if (reserved) {
-        util.messageError(`This ID are reserved. (key: ${reserved.key}, prupose: ${reserved.description})`);
+        util.messageError(`This ID are reserved. (id: ${reserved.id}, prupose: ${reserved.description})`);
         return;
     }
 

@@ -18,12 +18,12 @@ export function getMarkerQuickItems(markers: Array<IdentifiedMark>): Array<vscod
     let array: Array<vscode.QuickPickItem> = [];
 
     markers.forEach((x) => {
-        const key = x.id;
+        const id = x.id;
         const value = x.mark;
 
         let workspaceRelativePath = vscode.workspace.asRelativePath(value.document.fileName);
 
-        let item: MarkQuickPickItem = { 'id': key, 'label': key, detail: `${positionToString(value.position)}, ${workspaceRelativePath}`, description: value.description };
+        let item: MarkQuickPickItem = { 'id': id, 'label': id, detail: `${positionToString(value.position)}, ${workspaceRelativePath}`, description: value.description };
         array.push(item);
     });
 

@@ -7,7 +7,7 @@ import { MarkerJumperContext } from './markcontext';
 export function activate(context: vscode.ExtensionContext) {
 	var markContext = new MarkerJumperContext();
 
-	markContext.markManager.registerReservedId({ key: ReservedId.last, description: 'Last cursor position (before a Mark Goto)' });
+	markContext.markManager.registerReservedId({ id: ReservedId.last, description: 'Last cursor position (before a Mark Goto)' });
 
 	let cmdSetMark = vscode.commands.registerCommand('marker-jumper.setMark', () => { cmds.setMark(markContext); });
 	let cmdGoToMark = vscode.commands.registerCommand('marker-jumper.gotoMark', () => { cmds.goToMark(markContext); });

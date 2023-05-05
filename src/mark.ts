@@ -43,7 +43,7 @@ export class Mark {
 }
 
 export interface ReservedIdInformation {
-	key: string,
+	id: string,
 	description: string
 }
 
@@ -54,7 +54,7 @@ export enum ReservedId {
 
 
 export type MarkManagerEventType = 'markset' | 'markremove' | 'markclear';
-//! Refactoring! Change every 'KEY' to 'ID'
+
 export class MarkManager {
 	private events: Map<MarkManagerEventType, Array<Function>>;
 	private markers: Map<string, Mark>;
@@ -124,7 +124,7 @@ export class MarkManager {
 	}
 
 	public registerReservedId(info: ReservedIdInformation) {
-		let containsThisId = this.isKeyRegistered(info.key);
+		let containsThisId = this.isIdRegistered(info.id);
 		if (containsThisId)
 			throw new Error('This ID has already been reserved');
 
@@ -132,7 +132,7 @@ export class MarkManager {
 	}
 
 	public unregisterReservedId(info: ReservedIdInformation) {
-		let indexOf: number | undefined = this.reservedIdInfos.findIndex((x) => x.key === info.key);
+		let indexOf: number | undefined = this.reservedIdInfos.findIndex((x) => x.id === info.id);
 		if (!indexOf)
 			throw new Error('This ID has not been reserved');
 
@@ -145,12 +145,12 @@ export class MarkManager {
 			this.reservedIdInfos.length -= 1;
 	}
 
-	public isKeyRegistered(key: string): boolean | undefined {
-		return this.getReservedKeyInfo(key) ? true : false;
+	public isIdRegistered(id: string): boolean | undefined {
+		return this.getReservedIdInfo(id) ? true : false;
 	}
 
-	public getReservedKeyInfo(key: string): ReservedIdInformation | undefined {
-		return this.reservedIdInfos.find((x) => x.key === key);
+	public getReservedIdInfo(id: string): ReservedIdInformation | undefined {
+		return this.reservedIdInfos.find((x) => x.id === id);
 	}
 
 	public getList(): Array<IdentifiedMark> {
