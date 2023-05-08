@@ -1,6 +1,6 @@
 # marker-jumper
 
-### An extension to easily define and jump between points in your code
+### A vscode extension to easily define and jump between points in your code
 
 ![Demonstration](assets/demo.gif)
 ---
