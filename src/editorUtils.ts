@@ -1,5 +1,3 @@
-// TODO!: Make This a specific file/class
-
 import * as vscode from 'vscode';
 import { MarkQuickPickItem, IdentifiedMark } from './mark';
 
@@ -33,15 +31,15 @@ export function getMarkerQuickItems(markers: Array<IdentifiedMark>): Array<vscod
 
 export async function gotoDocPos(document: vscode.TextDocument, pos: vscode.Position): Promise<boolean> {
     return new Promise<boolean>(async () => {
-        let activeEditor = vscode.window.activeTextEditor;
-        if (!activeEditor) {
-            return false;
-        }
-
         await vscode.window.showTextDocument(document);
         let gotoSuccess = gotoPos(pos);
         return gotoSuccess;
     });
+}
+
+export async function openNewTextEditor(document: vscode.TextDocument, pos: vscode.Position) {
+    return await vscode.window.showTextDocument(document);
+
 }
 
 export function messageError(message: string): void {

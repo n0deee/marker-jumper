@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { ReservedId } from './mark';
 import * as cmds from './cmds';
-import { MarkerJumperContext } from './markcontext';
+import { MarkerJumperContext } from './markerjumpercontext';
 
 
 export function activate(context: vscode.ExtensionContext) {

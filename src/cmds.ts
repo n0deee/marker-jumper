@@ -1,8 +1,43 @@
 import * as vscode from 'vscode';
 import { IdentifiedMark, Mark, MarkQuickPickItem, ReservedId } from './mark';
-import * as util from './utils';
-import { MarkerJumperContext } from './markcontext';
+import * as util from './editorUtils';
+import { MarkerJumperContext } from './markerjumpercontext';
 
+export type MarkCmdEventType = 'markset' | 'markgoto' | 'markremove' | 'markclear';
+const events: Map<MarkCmdEventType, Array<Function>> = new Map<MarkCmdEventType, Array<Function>>;
+
+
+// TODO: Move this to a batter place
+export function addEventListener(event: MarkCmdEventType, func: Function) {
+    let eventArray = events.get(event);
+
+    if (eventArray === undefined) {
+        eventArray = [];
+        events.set(event, eventArray);
+    }
+
+    eventArray.push(func);
+}
+
+export function removeEventListener(event: MarkCmdEventType, func: Function) {
+    let eventArray = events.get(event);
+    if (eventArray === undefined) return;
+
+    let index = eventArray.indexOf(func);
+
+    if (index === undefined) return;
+
+    eventArray = [...eventArray.splice(0, index), ...eventArray.splice(index + 1)];
+}
+
+export function raiseEvent(event: MarkCmdEventType, ...params: any) {
+    let eventArray = events.get(event);
+    if (eventArray === undefined) return;
+
+    eventArray.forEach((f) => {
+        f(...params);
+    });
+}
 
 export async function setMark(context: MarkerJumperContext) {
     // Getting active text editor information
