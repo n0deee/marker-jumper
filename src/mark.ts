@@ -163,7 +163,7 @@ export class MarkManager {
 		return array;
 	}
 
-	public getSortedListByLastUse() {
+	public getSortedListByLastUse(): Array<IdentifiedMark> {
 		return this.getList().sort((a, b) => {
 			let aLastUse = a.mark.lastUse || a.mark.createdAt;
 			let bLastUse = b.mark.lastUse || b.mark.createdAt;

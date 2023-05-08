@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Mark, MarkQuickPickItem, ReservedId } from './mark';
+import { IdentifiedMark, Mark, MarkQuickPickItem, ReservedId } from './mark';
 import * as util from './utils';
 import { MarkerJumperContext } from './markcontext';
 
@@ -83,4 +83,16 @@ export async function removeMark(context: MarkerJumperContext) {
 export async function clearMarks(context: MarkerJumperContext) {
     context.markManager.clearMarks();
     util.messageInformation('All Markers Removed');
+}
+
+export async function goToLastUsedMark(context: MarkerJumperContext) {
+    let marks: Array<IdentifiedMark> = context.markManager.getSortedListByLastUse();
+    if (marks.length <= 0) {
+        util.messageError('No Marks saved');
+        return;
+    }
+
+    let lastMark: Mark = marks[0].mark;
+
+    util.gotoDocPos(lastMark.document, lastMark.position);
 }
