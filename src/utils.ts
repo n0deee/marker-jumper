@@ -9,8 +9,9 @@ export function gotoPos(pos: vscode.Position): boolean {
         return false;
     }
 
-    activeEditor.selection = new vscode.Selection(pos, pos);
-    activeEditor.revealRange(new vscode.Range(pos, pos));
+    let newSelection = new vscode.Selection(pos, pos);
+    activeEditor.selection = new vscode.Selection(newSelection.start, newSelection.end);
+    activeEditor.revealRange(newSelection, vscode.TextEditorRevealType.InCenterIfOutsideViewport);
     return true;
 }
 
