@@ -3,42 +3,6 @@ import { IdentifiedMark, Mark, MarkQuickPickItem, ReservedId } from './mark';
 import * as util from './editorUtils';
 import { MarkerJumperContext } from './markerjumpercontext';
 
-export type MarkCmdEventType = 'markset' | 'markgoto' | 'markremove' | 'markclear';
-const events: Map<MarkCmdEventType, Array<Function>> = new Map<MarkCmdEventType, Array<Function>>;
-
-
-// TODO: Move this to a batter place
-export function addEventListener(event: MarkCmdEventType, func: Function) {
-    let eventArray = events.get(event);
-
-    if (eventArray === undefined) {
-        eventArray = [];
-        events.set(event, eventArray);
-    }
-
-    eventArray.push(func);
-}
-
-export function removeEventListener(event: MarkCmdEventType, func: Function) {
-    let eventArray = events.get(event);
-    if (eventArray === undefined) return;
-
-    let index = eventArray.indexOf(func);
-
-    if (index === undefined) return;
-
-    eventArray = [...eventArray.splice(0, index), ...eventArray.splice(index + 1)];
-}
-
-export function raiseEvent(event: MarkCmdEventType, ...params: any) {
-    let eventArray = events.get(event);
-    if (eventArray === undefined) return;
-
-    eventArray.forEach((f) => {
-        f(...params);
-    });
-}
-
 export async function setMark(context: MarkerJumperContext) {
     // Getting active text editor information
     let activeEditor = vscode.window.activeTextEditor;
@@ -72,6 +36,7 @@ export async function setMark(context: MarkerJumperContext) {
 
     let marker: Mark = Mark.createFromCurrentPos(description) || new Mark(document, cursorPos, description);
     context.markManager.setMark(id, marker);
+    util.statusBarMessage(`Marker '${id}' set (at ${util.positionToString(marker.position)}).`);
 }
 
 export async function goToMark(context: MarkerJumperContext) {
@@ -79,7 +44,7 @@ export async function goToMark(context: MarkerJumperContext) {
     let items = util.getMarkerQuickItems(context.markManager.getSortedListByLastUse());
     let input: MarkQuickPickItem | undefined = await vscode.window.showQuickPick(items, { canPickMany: false, matchOnDescription: true, title: 'GoTo Mark' }) as MarkQuickPickItem;
     if (!input) return;
-    
+
     // Getting the marker
     let id: string = input.id;
     let marker = context.markManager.getMark(id);
@@ -90,18 +55,23 @@ export async function goToMark(context: MarkerJumperContext) {
     marker.setLastUseForNow();
 
     // Saving Last Position
+    let backMarkId: string = ReservedId.last;
     let backMark: Mark | undefined = Mark.createFromCurrentPos('Last Position');
+    let backMarkString: string = '';
     if (backMark) {
         backMark.addLastUseTime(1);
-        context.markManager.setMark(ReservedId.last, backMark);
+        context.markManager.setMark(backMarkId, backMark);
+        backMarkString = ` '${backMarkId}' set (at ${util.positionToString(backMark.position)})`;
     }
-    
+
     // Go To document and line
     let success = await util.gotoDocPos(marker.document, marker.position);
     if (!success) {
         util.messageError('File vanished?');
         return;
     }
+
+    util.statusBarMessage(`Going to marker ${id} (at ${util.positionToString(marker.position)}, ${vscode.workspace.asRelativePath(marker.document.uri)}).${backMarkString}`);
 }
 
 export async function removeMark(context: MarkerJumperContext) {
@@ -113,11 +83,12 @@ export async function removeMark(context: MarkerJumperContext) {
     // Getting the marker
     let id: string = input.id;
     context.markManager.removeMark(id);
+    util.statusBarMessage(`Marker ${id} deleted`);
 }
 
 export async function clearMarks(context: MarkerJumperContext) {
     context.markManager.clearMarks();
-    util.messageInformation('All Markers Removed');
+    util.statusBarMessage('All Markers Removed');
 }
 
 export async function goToLastUsedMark(context: MarkerJumperContext) {
@@ -130,4 +101,5 @@ export async function goToLastUsedMark(context: MarkerJumperContext) {
     let lastMark: Mark = marks[0].mark;
 
     util.gotoDocPos(lastMark.document, lastMark.position);
+    util.statusBarMessage('Going to last used marker');
 }

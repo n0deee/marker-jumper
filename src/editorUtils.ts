@@ -50,8 +50,8 @@ export function messageInformation(message: string): void {
     vscode.window.showInformationMessage(`Marker Jumper: ${message}`);
 }
 
-export function statusBarMessage(message: string): void {
-    vscode.window.setStatusBarMessage(message);
+export function statusBarMessage(message: string, timeout: number = 5000): void {
+    vscode.window.setStatusBarMessage(message, timeout);
 }
 
 export function positionToString(position: vscode.Position): string {

@@ -31,7 +31,7 @@
             {
                 "command": "marker-jumper.clearMarks",
                 "title": "Marker Jumper: Clears Marks",
-                "shortTitle": "Clears Marks"
+                "shortTitle": "Clear Marks"
             },
             {
                 "command": "marker-jumper.gotoLastUsedMark",
