@@ -1,10 +1,10 @@
 ### Todo
-- [ ] Improve the README.md with images
 
 ### In progress
 
 
 ### Done
+- [x] Improve the README.md with images
 - [x] Write Readme.md  
 - [x] Make status bar messages
 - [x] Refactore Utils from a more useful name

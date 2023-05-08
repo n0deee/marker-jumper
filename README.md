@@ -1,7 +1,8 @@
-# marker-jumper README
+# marker-jumper
 
-An extension to easily define and jump between parts of your code
+### An extension to easily define and jump between points in your code
 
+![Demonstration](assets/demo.gif)
 ---
 
 ## Features
@@ -11,9 +12,16 @@ An extension to easily define and jump between parts of your code
 |------------------------|------------------------------------------------------|--------------|--------------------------------|
 |**Set Mark**            |Sets a marker at the current cursor position          |`Ctrl+K N`    |`marker-jumper.setMark`         |
 |**Go to Mark**          |Goes to a marker in the list                          |`Ctrl+K G`    |`marker-jumper.gotoMark`        |
-|**Remove Mark**         |Removes a bookmark from the list                      |---           |`marker-jumper.removeMark`      |
+|**Remove Mark**         |Removes a Markerfrom the list                         |---           |`marker-jumper.removeMark`      |
 |**Clear Marks**         |Clears the entire list of bookmarks                   |---           |`marker-jumper.clearMarks`      |
 |**Go To Last Used Mark**|Goes directly to the most recently used/created marker|`Ctrl+K L`    |`marker-jumper.gotoLastUsedMark`|
+
+### Examples
+
+To set a mark, you need to set a id and can set a description (that will appears on the list)
+
+![Demonstration of the Set command](assets/demo_cmd.png)
+
 
 <!--
 ## Extension Settings
