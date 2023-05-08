@@ -3,6 +3,7 @@
     "displayName": "Marker Jumper",
     "description": "",
     "version": "0.8.0",
+    "icon": "assets/icon.png",
     "engines": {
         "vscode": "^1.77.0"
     },
