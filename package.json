@@ -1,8 +1,10 @@
 {
     "name": "marker-jumper",
     "displayName": "Marker Jumper",
-    "description": "",
-    "version": "0.8.0",
+    "description": "A vscode extension to easily define and jump between points in your code",
+    "version": "1.0.0",
+    "repository": "https://github.com/n0deee/marker-jumper.git",
+    "publisher": "n0de",
     "icon": "assets/icon.png",
     "engines": {
         "vscode": "^1.77.0"
