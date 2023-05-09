@@ -22,6 +22,10 @@ To set a mark, you need to set a id and can set a description (that will appears
 
 ![Demonstration of the Set command](assets/demo_cmd.png)
 
+When you define a mark with an id that already exists, the old one will be replaced by the new one
+
+Currently, the markers are not saved in persistent storage. This means that all saved bookmarks disappear when you close VSCode.
+A setting to change this is planned for a near future.
 
 <!--
 ## Extension Settings
