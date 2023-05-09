@@ -1,4 +1,5 @@
 ### Todo
+- [ ] Save markers to persistent storage
 
 ### In progress
 
